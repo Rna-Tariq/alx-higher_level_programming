@@ -29,7 +29,7 @@ class Square:
             Private size.
         """
         return self.__size
-    
+
     @size.setter
     def size(self, new_size):
         if type(new_size) is not int:
