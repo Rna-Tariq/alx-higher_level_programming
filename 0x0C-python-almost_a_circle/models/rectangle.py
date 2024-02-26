@@ -24,12 +24,12 @@ class Rectangle(Base):
         self.height = height
         self.x = x
         self.y = y
-        super.__init__(id)
+        super().__init__(id)
     
     @property
     def width(self):
         """get the width of the Rectangle."""
-        return self.width
+        return self.__width
     
     @width.setter
     def width(self, value):
@@ -43,7 +43,7 @@ class Rectangle(Base):
     @property
     def height(self):
         "get the height of the Rectangle."
-        return self.height
+        return self.__height
     
     @height.setter
     def height(self, value):
