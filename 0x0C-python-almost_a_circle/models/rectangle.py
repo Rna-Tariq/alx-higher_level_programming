@@ -84,8 +84,12 @@ class Rectangle(Base):
         if self.height == 0 or self.width == 0:
             print("")
             return
+
+        [print("") for y in range(self.y)]
         for i in range(self.height):
-            print("#" * self.width)
+            [print(" ", end="") for x in range(self.x)]
+            [print("#", end="") for w in range(self.width)]
+            print("")
 
     def __str__(self):
         """Return the print() and str() representation of the Rectangle."""
