@@ -71,16 +71,18 @@ class Base:
 
     @classmethod
     def load_from_file(cls):
-        """Returns a list of instances"""
+        """Return a list of classes instantiated from a file of JSON strings.
 
-        file_name = cls.__name__ + ".json"
-        list_of_instances = []
-        list_dictionaries = []
+        Reads from `<cls.__name__>.json`.
 
-        if os.path.exists(file_name):
-            with open(file_name, 'r') as my_file:
-                my_str = my_file.read()
-                list_dictionaries = cls.from_json_string(my_str)
-                for dictionary in list_dictionaries:
-                    list_of_instances.append(cls.create(**dictionary))
-        return list_of_instances
+        Returns:
+            If the file does not exist - an empty list.
+            Otherwise - a list of instantiated classes.
+        """
+        filename = str(cls.__name__) + ".json"
+        try:
+            with open(filename, "r") as jsonfile:
+                list_dicts = Base.from_json_string(jsonfile.read())
+                return [cls.create(**d) for d in list_dicts]
+        except IOError:
+            return []
