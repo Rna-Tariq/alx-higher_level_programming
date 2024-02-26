@@ -26,75 +26,61 @@ class Base:
 
     @staticmethod
     def to_json_string(list_dictionaries):
-        """Return the JSON serialization of a list of dicts.
-
-        Args:
-            list_dictionaries (list): A list of dictionaries.
-        """
+        """returns the JSON representation of list_dictionaries"""
         if list_dictionaries is None or list_dictionaries == []:
             return "[]"
-        else:
-            json.dumps(list_dictionaries)
+        if (type(list_dictionaries) != list or not
+                all(type(i) == dict for i in list_dictionaries)):
+            raise TypeError("list_dictionaries must be a list of dictionaries")
+        return json.dumps(list_dictionaries)
 
     @classmethod
     def save_to_file(cls, list_objs):
-        """Write the JSON serialization of a list of objects to a file.
-
-        Args:
-            list_objs (list): A list of inherited Base instances.
-        """
-        fileName = cls.__name__ + ".json"
-        with open(fileName, "w") as jsonFile:
+        """Save JSON representation to file"""
+        file_name = cls.__name__ + ".json"
+        with open(file_name, "w") as jsonfile:
             if list_objs is None:
-                jsonFile.write("[]")
+                jsonfile.write("[]")
             else:
                 list_dicts = [o.to_dictionary() for o in list_objs]
-                jsonFile.write(Base.to_json_string(list_dicts))
+                jsonfile.write(Base.to_json_string(list_dicts))
 
-    @classmethod
+    @staticmethod
     def from_json_string(json_string):
-        """Return the deserialization of a JSON string.
+        """Returns list of JSON string representations"""
+        json_string_list = []
 
-        Args:
-            json_string (str): A JSON str representation of a list of dicts.
-        Returns:
-            If json_string is None or empty - an empty list.
-            Otherwise - the Python list represented by json_string.
-        """
-        if json_string is None or json_string == "[]":
-            return "[]"
-        else:
-            return json.loads(json_string)
+        if json_string is not None and json_string != '':
+            if type(json_string) != str:
+                raise TypeError("json_string must be a string")
+            json_string_list = json.loads(json_string)
+
+        return json_string_list
 
     @classmethod
     def create(cls, **dictionary):
-        """Return a class instantied from a dictionary of attributes.
+        """Returns an instance with all attributes already set"""
+        # create an instance of an existing class
+        if cls.__name__ == 'Rectangle':
+            dummy = cls(1, 1)
+        elif cls.__name__ == 'Square':
+            dummy = cls(1)
 
-        Args:
-            **dictionary (dict): Key/value pairs of attributes to initialize.
-        """
-        if dictionary and dictionary != {}:
-            if cls.__name__ == "Rectangle":
-                new = cls(1, 1)
-            else:
-                new = cls(1)
-            new.update(**dictionary)
-            return new
+        dummy.update(**dictionary)
+        return dummy
 
     @classmethod
     def load_from_file(cls):
-        """Return a list of classes instantiated from a file of JSON strings.
+        """Returns a list of instances"""
 
-        Reads from `<cls.__name__>.json`.
+        file_name = cls.__name__ + ".json"
+        list_of_instances = []
+        list_dictionaries = []
 
-        Returns:
-            If the file does not exist - an empty list.
-            Otherwise - a list of instantiated classes.
-        """
-        filename = str(cls.__name__) + ".json"
-        try:
-            with open(filename, "r") as jsonfile:
-                list_dicts = Base.from_json_string(jsonfile.read())
-                return [cls.create(**d) for d in list_dicts]
-        except IOError:
-            return []
+        if os.path.exists(file_name):
+            with open(file_name, 'r') as my_file:
+                my_str = my_file.read()
+                list_dictionaries = cls.from_json_string(my_str)
+                for dictionary in list_dictionaries:
+                    list_of_instances.append(cls.create(**dictionary))
+        return list_of_instances
