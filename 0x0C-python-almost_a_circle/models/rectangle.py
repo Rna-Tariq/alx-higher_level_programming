@@ -86,3 +86,7 @@ class Rectangle(Base):
             return
         for i in range(self.height):
             print("#" * self.width)
+
+    def __str__(self):
+        """Return the print() and str() representation of the Rectangle."""
+        return "[Rectangle] ({}) {}/{}".format(self.id, self.width, self.height)
