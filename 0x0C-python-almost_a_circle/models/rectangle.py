@@ -139,21 +139,6 @@ class Rectangle(Base):
                 elif a == 4:
                     self.y = arg
                 a += 1
-        elif kwargs and len(kwargs) != 0:
-            for i, j in kwargs.items():
-                if i == "id":
-                    if j is None:
-                        self.__init__(self.width, self.height, self.x, self.y)
-                    else:
-                        self.id = j
-                elif i == "width":
-                    self.width = j
-                elif i == "height":
-                    self.height = j
-                elif i == "x":
-                    self.x = j
-                elif i == "y":
-                    self.y = j
 
     def to_dictionary(self):
         """Return the dictionary representation of a Rectangle."""
