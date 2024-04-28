@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """All cities by state"""
+
 import MySQLdb
 import sys
 
@@ -13,16 +14,16 @@ if __name__ == "__main__":
     cursor = db.cursor()
 
     query = """
-        SELECT cities.name FROM cities
-        JOIN states ON cities.state_id = states.id
-        WHERE states.name = %s
-        ORDER BY cities.id ASC
-        """
+    SELECT GROUP_CONCAT(cities.name ORDER BY cities.id ASC SEPARATOR ', ')
+    FROM cities
+    JOIN states ON cities.state_id = states.id
+    WHERE states.name = %s;
+    """
     cursor.execute(query, (state_name,))
 
     result = cursor.fetchone()
     if result[0]:
-        print(", ".join(map(lambda x: x[0], cur.fetchall())))
+        print(result[0])
     else:
         print("No cities found for the state:", state_name)
 
