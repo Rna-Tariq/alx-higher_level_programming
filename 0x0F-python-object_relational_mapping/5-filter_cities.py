@@ -21,11 +21,7 @@ if __name__ == "__main__":
     """
     cursor.execute(query, (state_name,))
 
-    result = cursor.fetchone()
-    if result[0]:
-        print(result[0])
-    else:
-        print("No cities found for the state:", state_name)
+    print(", ".join(map(lambda x: x[0], cur.fetchall())))
 
     cursor.close()
     db.close()
