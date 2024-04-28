@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     result = cursor.fetchone()
     if result[0]:
-        print(result[0])
+        print(", ".join(map(lambda x: x[0], cur.fetchall())))
     else:
         print("No cities found for the state:", state_name)
 
