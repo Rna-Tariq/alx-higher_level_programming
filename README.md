@@ -1,1 +1,1 @@
-This is sprint 2 of ALX program
+0x15-javascript-web_jquery
